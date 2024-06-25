@@ -1,0 +1,44 @@
+name: JASAI_LIVE
+description: "Jasai Live App"
+publish_to: "none"
+
+version: 1.0.0+2
+
+environment:
+  sdk: ">=3.2.6 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  carousel_slider: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+  font_awesome_flutter: ^10.2.1
+  flutter_spinkit: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/icon.png
+    - assets/images/logo.png
+    - assets/images/image1.png
+    - assets/images/image2.png
+    - assets/images/image4.png
+    - assets/images/image5.png
+    - assets/images/image6.png
+    - assets/images/image7.png
+    - assets/images/image9.png
+    - assets/images/image12.png
+    - assets/images/image13.png
+    - assets/images/image14.png
