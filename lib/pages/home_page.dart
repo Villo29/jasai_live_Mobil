@@ -14,7 +14,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _passwordController = TextEditingController();
 
 
-  final String _validEmail = 'usuario@example.com';
+  final String _validEmail = 'paaisa@jasai.com';
   final String _validPassword = '1234';
 
   @override

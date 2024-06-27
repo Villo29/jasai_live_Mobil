@@ -78,7 +78,8 @@ class _HomePageRegister extends State<HomePageRegister> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Verifica si las credenciales son válidas
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registro exitoso')));
+                Navigator.pop(context);
               },
               child: Text('Registrarse'),
             ),
