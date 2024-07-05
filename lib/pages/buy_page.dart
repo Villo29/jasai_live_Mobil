@@ -6,16 +6,18 @@ void main() {
 }
 
 class Buy_Ticket extends StatelessWidget {
+  const Buy_Ticket({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Sobre Concierto'),
+          title: const Text('Sobre Concierto'),
           backgroundColor: Colors.deepPurple,
         ),
-        drawer: Drawer(), // Drawer para el menú lateral
+        drawer: const Drawer(), // Drawer para el menú lateral
         body: ConcertDetails(),
       ),
     );
@@ -23,6 +25,8 @@ class Buy_Ticket extends StatelessWidget {
 }
 
 class ConcertDetails extends StatefulWidget {
+  const ConcertDetails({super.key});
+
   @override
   _ConcertDetailsState createState() => _ConcertDetailsState();
 }
@@ -55,7 +59,7 @@ class _ConcertDetailsState extends State<ConcertDetails> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -71,7 +75,7 @@ class _ConcertDetailsState extends State<ConcertDetails> {
                     ],
                   ),
                 ),
-                SizedBox(width: 8.0),
+                const SizedBox(width: 8.0),
                 Expanded(
                   flex: 2,
                   child: GestureDetector(
@@ -88,34 +92,34 @@ class _ConcertDetailsState extends State<ConcertDetails> {
                 ),
               ],
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'PESO PLUMA, TUXTLA GUTIERREZ',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                   ),
-                  Text('16 de mayo de 2024'),
-                  SizedBox(height: 8.0),
-                  Text('VIP \$1,300'),
-                  Text('PREFERENTE \$1,000'),
-                  Text('GENERAL \$799'),
-                  SizedBox(height: 8.0),
-                  Text('2024'),
-                  SizedBox(height: 8.0),
+                  const Text('16 de mayo de 2024'),
+                  const SizedBox(height: 8.0),
+                  const Text('VIP \$1,300'),
+                  const Text('PREFERENTE \$1,000'),
+                  const Text('GENERAL \$799'),
+                  const SizedBox(height: 8.0),
+                  const Text('2024'),
+                  const SizedBox(height: 8.0),
                   ElevatedButton(
                     onPressed: () {
                       // Acción del botón
                     },
-                    child: Text('CONSULTA POR WHATSAPP'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       foregroundColor:
                           Colors.white, // Aquí cambias el color del texto
                     ),
+                    child: Text('CONSULTA POR WHATSAPP'),
                   ),
                   OutlinedButton(
                     onPressed: () {
@@ -126,17 +130,17 @@ class _ConcertDetailsState extends State<ConcertDetails> {
                                 PayPage ()),
                       );
                     },
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.purple),
+                    ),
                     child: Text('AÑADIR AL CARRITO',
                         style: TextStyle(color: Colors.purple)),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.purple),
-                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
-            Center(
+            const SizedBox(height: 8.0),
+            const Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -147,24 +151,24 @@ class _ConcertDetailsState extends State<ConcertDetails> {
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
-            Row(
+            const SizedBox(height: 8.0),
+            const Row(
               children: [
                 SizedBox(width: 8.0),
                 Text('Paypal'),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             EventCard(
               imagePath: 'assets/images/image1.png',
               title: 'Junior H - Tapachula, Chiapas',
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             EventCard(
               imagePath: 'assets/images/image9.png',
               title: 'Bad Bunny - Puebla',
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             EventCard(
               imagePath: 'assets/images/image6.png',
               title: 'Luis Miguel - El Parral, Chiapas',
@@ -180,12 +184,12 @@ class EventCard extends StatelessWidget {
   final String imagePath;
   final String title;
 
-  EventCard({required this.imagePath, required this.title});
+  const EventCard({super.key, required this.imagePath, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         border: Border.all(
           color: const Color.fromARGB(255, 47, 43, 173),
@@ -201,10 +205,10 @@ class EventCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             title,
-            style: TextStyle(color: Colors.blue),
+            style: const TextStyle(color: Colors.blue),
           ),
         ],
       ),

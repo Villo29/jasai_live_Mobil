@@ -12,15 +12,17 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   carousel_slider: ^4.0.0
-  flutter_launcher_icons: ^0.13.1
   font_awesome_flutter: ^10.2.1
   flutter_spinkit: ^5.1.0
   video_player: ^2.2.10
+  http: ^0.13.4
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
   android: true

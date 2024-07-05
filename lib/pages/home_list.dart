@@ -33,7 +33,7 @@ class _HomeList extends State<HomeList> {
           title: Text(widget.title),
           leading: Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
@@ -42,7 +42,7 @@ class _HomeList extends State<HomeList> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              DrawerHeader(
+              const DrawerHeader(
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
@@ -55,23 +55,23 @@ class _HomeList extends State<HomeList> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home),
-                title: Text('Inicio'),
+                leading: const Icon(Icons.home),
+                title: const Text('Inicio'),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.event),
-                title: Text('Eventos'),
+                leading: const Icon(Icons.event),
+                title: const Text('Eventos'),
                 onTap: () {
                   // Acción al presionar Eventos
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Perfil'),
+                leading: const Icon(Icons.account_circle),
+                title: const Text('Perfil'),
                 onTap: () {
                   // Acción al presionar Perfil
                   Navigator.push(
@@ -83,8 +83,8 @@ class _HomeList extends State<HomeList> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Configuración'),
+                leading: const Icon(Icons.settings),
+                title: const Text('Configuración'),
                 onTap: () {
                   // Acción al presionar Configuración
                   Navigator.pop(context);
@@ -108,7 +108,7 @@ class _HomeList extends State<HomeList> {
                     aspectRatio: 16 / 9,
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enableInfiniteScroll: true,
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayAnimationDuration: const Duration(milliseconds: 800),
                     viewportFraction: 0.8,
                   ),
                   items: imgList
@@ -120,9 +120,9 @@ class _HomeList extends State<HomeList> {
                           ))
                       .toList(),
                 ),
-                SizedBox(height: 20),
-                Text('FILTRAR POR CATEGORIA', style: TextStyle(fontSize: 20)),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
+                const Text('FILTRAR POR CATEGORIA', style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 20),
                 Wrap(
                   spacing: 10,
                   children: [
@@ -133,9 +133,9 @@ class _HomeList extends State<HomeList> {
                     _categoryButton('Festival'),
                   ],
                 ),
-                SizedBox(height: 20),
-                Text('POPULAR', style: TextStyle(fontSize: 20)),
-                SizedBox(height: 10),
+                const SizedBox(height: 20),
+                const Text('POPULAR', style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -144,27 +144,27 @@ class _HomeList extends State<HomeList> {
                     _popularItem('assets/images/image6.png', 'Luis Miguel'),
                   ],
                 ),
-                SizedBox(height: 20),
-                Text('PRÓXIMOS A REALIZAR', style: TextStyle(fontSize: 20)),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
+                const Text('PRÓXIMOS A REALIZAR', style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 20),
                 Column(
                   children: [
                     _eventItem('assets/images/image12.png', 'Peso Pluma',
                         'Suchiapa, Chiapas'),
-                    SizedBox(height: 20), // Espacio entre los ítems
+                    const SizedBox(height: 20), // Espacio entre los ítems
                     _eventItem('assets/images/image4.png', 'Dani Flow',
                         'Tuxtla Gutierrez, Chiapas'),
-                    SizedBox(height: 20), // Espacio entre los ítems
+                    const SizedBox(height: 20), // Espacio entre los ítems
                     _eventItem('assets/images/image5.png', 'Miguel Bose',
                         'Suchiapa, Chiapas'),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     // Acción del botón "Ver Más"
                   },
-                  child: Text('VER MÁS'),
+                  child: const Text('VER MÁS'),
                 ),
               ],
             ),
@@ -197,7 +197,7 @@ class _HomeList extends State<HomeList> {
 
   Widget _eventItem(String imagePath, String name, String location) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       width: double.infinity, // Hace que el contenedor ocupe todo el ancho disponible
       decoration: BoxDecoration(
         border: Border.all(
@@ -225,12 +225,12 @@ class _HomeList extends State<HomeList> {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             name,
-            style: TextStyle(color: Colors.blue),
+            style: const TextStyle(color: Colors.blue),
           ),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Text(location),
         ],
       ),
@@ -239,7 +239,7 @@ class _HomeList extends State<HomeList> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: HomeList(title: 'BIENVENIDO A JASAI'),
   ));
 }

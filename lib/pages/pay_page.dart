@@ -7,6 +7,8 @@ void main() {
 }
 
 class PayPage extends StatelessWidget {
+  const PayPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,6 +23,8 @@ class PayPage extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -32,12 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _isLoading = true;
     });
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pago realizado con éxito')),
+        const SnackBar(content: Text('Pago realizado con éxito')),
       );
     });
   }
@@ -48,21 +52,21 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.blue[800],
-        title: Text(
+        title: const Text(
           'TU CONFIANZA ES NUESTRA MEJOR RECOMPENSA',
           style: TextStyle(fontSize: 16.0),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Card(
                 elevation: 2,
-                margin: EdgeInsets.symmetric(vertical: 20.0),
+                margin: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
@@ -73,9 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'LOCALIDAD',
                           border: OutlineInputBorder(),
                         ),
@@ -88,56 +92,56 @@ class _MyHomePageState extends State<MyHomePage> {
                         }).toList(),
                         onChanged: (value) {},
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'NOMBRE COMPLETO',
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'NUMERO DE TELEFONO',
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       _isLoading
-                          ? SpinKitFadingCircle(
+                          ? const SpinKitFadingCircle(
                               color: Colors.blue,
                               size: 50.0,
                             )
                           : ElevatedButton(
                               onPressed: _handlePagar,
-                              child: Text('PAGAR'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue[800],
                                 foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 50, vertical: 20),
                               ),
+                              child: Text('PAGAR'),
                             ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
-                child: Text('QUITAR'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 ),
+                child: Text('QUITAR'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'SIGUENOS',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -149,20 +153,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                          icon: FaIcon(FontAwesomeIcons.facebook),
+                          icon: const FaIcon(FontAwesomeIcons.facebook),
                           onPressed: () {},
                         ),
                         IconButton(
-                          icon: FaIcon(FontAwesomeIcons.twitter),
+                          icon: const FaIcon(FontAwesomeIcons.twitter),
                           onPressed: () {},
                         ),
                         IconButton(
-                          icon: FaIcon(FontAwesomeIcons.tiktok),
+                          icon: const FaIcon(FontAwesomeIcons.tiktok),
                           onPressed: () {},
                         ),
                       ],
                     ),
-                    Text(
+                    const Text(
                       'TERMINOS LEGALES',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -170,9 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text('Terminos y condiciones\nPoliticas de privacidad'),
-                    SizedBox(height: 10),
-                    Text(
+                    const Text('Terminos y condiciones\nPoliticas de privacidad'),
+                    const SizedBox(height: 10),
+                    const Text(
                       'CONTACTANOS',
                       style: TextStyle(
                         fontSize: 16.0,
@@ -180,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Column(
+                    const Column(
                       children: [
                         Text('jesuruga@email.com'),
                         Text('+52 961 283 5436'),

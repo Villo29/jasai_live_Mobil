@@ -4,6 +4,8 @@ import 'package:video_player/video_player.dart';
 import 'package:JASAI_LIVE/pages/account_page.dart';
 
 class LivePage extends StatefulWidget {
+  const LivePage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -34,11 +36,11 @@ class _RegisterPageState extends State<LivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
-        backgroundColor: Color(0xFF3F51B5),
+        title: const Text(''),
+        backgroundColor: const Color(0xFF3F51B5),
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
@@ -49,7 +51,7 @@ class _RegisterPageState extends State<LivePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration(
                 color: Color(0xFF3F51B5),
               ),
@@ -62,29 +64,29 @@ class _RegisterPageState extends State<LivePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Inicio'),
+              leading: const Icon(Icons.home),
+              title: const Text('Inicio'),
               onTap: () {
                 // Acción al presionar "Inicio"
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeList(title: 'BIENVENIDO A JASAI'),
+                    builder: (context) => const HomeList(title: 'BIENVENIDO A JASAI'),
                   ),
                 );
               },
             ),
             ListTile(
-              leading: Icon(Icons.event),
-              title: Text('Eventos'),
+              leading: const Icon(Icons.event),
+              title: const Text('Eventos'),
               onTap: () {
                 // Acción al presionar "Eventos"
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Perfil'),
+              leading: const Icon(Icons.account_circle),
+              title: const Text('Perfil'),
               onTap: () {
                 // Acción al presionar "Perfil"
                 Navigator.push(
@@ -96,8 +98,8 @@ class _RegisterPageState extends State<LivePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Configuración'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Configuración'),
               onTap: () {
                 // Acción al presionar "Configuración"
                 Navigator.pop(context);
@@ -111,9 +113,9 @@ class _RegisterPageState extends State<LivePage> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(16.0),
-            color: Color(0xFF3F51B5),
-            child: Center(
+            padding: const EdgeInsets.all(16.0),
+            color: const Color(0xFF3F51B5),
+            child: const Center(
               child: Text(
                 "“TU CONFIANZA ES NUESTRA MEJOR RECOMPENSA”",
                 style: TextStyle(
@@ -125,14 +127,14 @@ class _RegisterPageState extends State<LivePage> {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Row(
+          const SizedBox(height: 20),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Icon(Icons.landscape, size: 80, color: Colors.purple),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _controller.value.isInitialized
               ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
@@ -141,25 +143,25 @@ class _RegisterPageState extends State<LivePage> {
               : Container(
                   height: 200,
                   color: Colors.black,
-                  child: Center(child: CircularProgressIndicator()),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               // Acción al presionar "Ver en Vivo"
             },
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-              side: BorderSide(color: Colors.pink),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+              side: const BorderSide(color: Colors.pink),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
-              textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            child: Text('EN VIVO'),
+            child: const Text('EN VIVO'),
           ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Spacer(),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'Jasai_live@',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -169,10 +171,4 @@ class _RegisterPageState extends State<LivePage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: LivePage(),
-  ));
 }
