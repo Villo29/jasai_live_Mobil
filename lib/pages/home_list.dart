@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:JASAI_LIVE/pages/buy_page.dart'; // Asegúrate de que la ruta sea correcta
 import 'package:JASAI_LIVE/pages/account_page.dart';
@@ -18,6 +20,60 @@ class _HomeList extends State<HomeList> {
     'assets/images/image2.png',
     'assets/images/image1.png',
   ];
+
+  List<dynamic> allEvents = [];
+  List<dynamic> filteredEvents = [];
+  int currentPage = 0;
+  final int pageSize = 3;
+  bool isLoading = false;
+  String selectedCategory = '';
+
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchEvents();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent && !isLoading) {
+        fetchEvents();
+      }
+    });
+  }
+
+  Future<void> fetchEvents() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.get(Uri.parse('http://67.202.4.38:3000/api/eventos'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> newEvents = json.decode(response.body);
+      setState(() {
+        allEvents.addAll(newEvents.skip(currentPage * pageSize).take(pageSize));
+        filterEvents();
+        currentPage++;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      throw Exception('Failed to load events');
+    }
+  }
+
+  void filterEvents() {
+    setState(() {
+      if (selectedCategory.isEmpty) {
+        filteredEvents = allEvents;
+      } else {
+        filteredEvents = allEvents.where((event) => event['genero'] == selectedCategory).toList();
+      }
+    });
+  }
 
   Future<bool> _onWillPop() async {
     SystemNavigator.pop();
@@ -75,11 +131,11 @@ class _HomeList extends State<HomeList> {
                 onTap: () {
                   // Acción al presionar Perfil
                   Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PerfilPage(), // Navegar a Buy_Ticket
-                ),
-              );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PerfilPage(), // Navegar a PerfilPage
+                    ),
+                  );
                 },
               ),
               ListTile(
@@ -94,6 +150,7 @@ class _HomeList extends State<HomeList> {
           ),
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -113,11 +170,11 @@ class _HomeList extends State<HomeList> {
                   ),
                   items: imgList
                       .map((item) => Container(
-                            child: Center(
-                              child: Image.asset(item,
-                                  fit: BoxFit.cover, width: 1000),
-                            ),
-                          ))
+                    child: Center(
+                      child: Image.asset(item,
+                          fit: BoxFit.cover, width: 1000),
+                    ),
+                  ))
                       .toList(),
                 ),
                 const SizedBox(height: 20),
@@ -148,24 +205,27 @@ class _HomeList extends State<HomeList> {
                 const Text('PRÓXIMOS A REALIZAR', style: TextStyle(fontSize: 20)),
                 const SizedBox(height: 20),
                 Column(
-                  children: [
-                    _eventItem('assets/images/image12.png', 'Peso Pluma',
-                        'Suchiapa, Chiapas'),
-                    const SizedBox(height: 20), // Espacio entre los ítems
-                    _eventItem('assets/images/image4.png', 'Dani Flow',
-                        'Tuxtla Gutierrez, Chiapas'),
-                    const SizedBox(height: 20), // Espacio entre los ítems
-                    _eventItem('assets/images/image5.png', 'Miguel Bose',
-                        'Suchiapa, Chiapas'),
+                  children: filteredEvents.isNotEmpty
+                      ? filteredEvents.map((event) {
+                    return Column(
+                      children: [
+                        _eventItem(event['imagen'], event['nombre'], event['lugar'], event['_id']),
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  }).toList()
+                      : [
+                    const Text('No hay eventos disponibles en esta categoría'),
                   ],
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Acción del botón "Ver Más"
-                  },
-                  child: const Text('VER MÁS'),
-                ),
+                if (isLoading)
+                  CircularProgressIndicator()
+                else
+                  ElevatedButton(
+                    onPressed: fetchEvents,
+                    child: const Text('VER MÁS'),
+                  ),
               ],
             ),
           ),
@@ -177,7 +237,13 @@ class _HomeList extends State<HomeList> {
   Widget _categoryButton(String text) {
     return ElevatedButton(
       onPressed: () {
-        // Acción del botón de categoría
+        setState(() {
+          selectedCategory = text;
+          currentPage = 0;
+          allEvents.clear();
+          filteredEvents.clear();
+          fetchEvents();
+        });
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.pink, // Color del botón
@@ -195,7 +261,7 @@ class _HomeList extends State<HomeList> {
     );
   }
 
-  Widget _eventItem(String imagePath, String name, String location) {
+  Widget _eventItem(String imagePath, String name, String location, String id) {
     return Container(
       padding: const EdgeInsets.all(10.0),
       width: double.infinity, // Hace que el contenedor ocupe todo el ancho disponible
@@ -214,11 +280,11 @@ class _HomeList extends State<HomeList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Buy_Ticket(), // Navegar a Buy_Ticket
+                  builder: (context) => BuyTicket(eventId: id), // Navegar a BuyTicket con el ID
                 ),
               );
             },
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               width: 150,
               height: 150,

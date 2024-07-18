@@ -111,7 +111,6 @@ class _HomePageRegisterState extends State<HomePageRegister> {
       ),
     );
   }
-
   Widget _buildRegisterButton() {
     return ElevatedButton(
       onPressed: _handleRegister,
@@ -126,25 +125,31 @@ class _HomePageRegisterState extends State<HomePageRegister> {
     final String telefono = _numeroController.text;
 
     if (nombre.isNotEmpty && correo.isNotEmpty && contrasena.isNotEmpty && telefono.isNotEmpty) {
-      final response = await http.post(
-        Uri.parse('http://67.202.4.38:3000/api/Usuarios'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'nombre': nombre,
-          'correo': correo,
-          'contrasena': contrasena,
-          'telefono': telefono,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registro exitoso')),
+      try {
+        final response = await http.post(
+          Uri.parse('http://67.202.4.38:3000/api/usuarios'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'nombre': nombre,
+            'correo': correo,
+            'contraseña': contrasena,
+            'telefono': telefono,
+          }),
         );
-        Navigator.pop(context);
-      } else {
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Registro exitoso')),
+          );
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error en el registro: ${response.statusCode} - ${response.body}')),
+          );
+        }
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error en el registro')),
+          SnackBar(content: Text('Error en la conexión: $e')),
         );
       }
     } else {
