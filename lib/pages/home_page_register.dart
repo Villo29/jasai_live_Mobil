@@ -132,7 +132,7 @@ class _HomePageRegisterState extends State<HomePageRegister> {
           body: json.encode({
             'nombre': nombre,
             'correo': correo,
-            'contraseña': contrasena,
+            'contrasena': contrasena,
             'telefono': telefono,
           }),
         );

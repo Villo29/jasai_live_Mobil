@@ -1,51 +1,45 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:JASAI_LIVE/models/user_model.dart'; // Asegúrate de que la ruta de importación es correcta
+import 'package:JASAI_LIVE/models/user_model.dart';
 
 class AuthModel extends ChangeNotifier {
   bool _isLoggedIn = false;
   String _token = '';
-  String _userId = ''; // Agregamos una variable para almacenar el ID del usuario
+  String _userId = '';
   UserModel? _currentUser;
 
   UserModel? get currentUser => _currentUser;
 
-  // Constructor que puede inicializar el modelo si es necesario
   AuthModel();
 
-  // Getter para saber si el usuario está logueado
   bool get isLoggedIn => _isLoggedIn;
 
-  // Método para realizar la autenticación y obtener el token
   Future<void> login(String correo, String contrasena) async {
     var url = Uri.parse('http://67.202.4.38:3000/api/usuarios/login');
     var response = await http.post(
       url,
       headers: {
-        'Content-Type': 'application/json', // Correcto manejo de Content-Type
+        'Content-Type': 'application/json',
       },
-      body: json.encode({ // Codifica el cuerpo a formato JSON
+      body: json.encode({
         'correo': correo,
-        'contraseña': contrasena,
+        'contrasena': contrasena,
       }),
     );
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       _token = data['token'];
-      _userId = data['usuario']['_id']; // Almacenamos el ID del usuario
+      _userId = data['usuario']['_id'];
       _isLoggedIn = true;
-      await fetchUserData(); // Llama a fetchUserData después de obtener el token
+      await fetchUserData();
       notifyListeners();
     } else {
-      print('Failed to log in with status: ${response.statusCode}');
-      print('Response: ${response.body}');
       throw Exception('Failed to log in');
     }
   }
 
-  // Método para cerrar la sesión
   void logout() {
     _isLoggedIn = false;
     _token = '';
@@ -54,9 +48,8 @@ class AuthModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Método para obtener los datos del usuario desde la API
   Future<void> fetchUserData() async {
-    var url = Uri.parse('http://67.202.4.38:3000/api/usuarios/${_userId}'); // Usamos el ID del usuario en la URL
+    var url = Uri.parse('http://67.202.4.38:3000/api/usuarios/${_userId}');
     var response = await http.get(
       url,
       headers: {
@@ -67,16 +60,53 @@ class AuthModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       var userData = json.decode(response.body);
-      if (userData != null) {
-        _currentUser = UserModel.fromJson(userData);
-        notifyListeners();
-      } else {
-        throw Exception('User data is null');
-      }
+      _currentUser = UserModel.fromJson(userData);
+      notifyListeners();
     } else {
-      print('Failed to load user data with status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
       throw Exception('Failed to load user data');
+    }
+  }
+
+  // Método para actualizar los datos del usuario
+  Future<void> updateUserData(String nombre, String correo, String contrasena, String telefono) async {
+    var url = Uri.parse('http://67.202.4.38:3000/api/usuarios/${_userId}');
+    var response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_token',
+      },
+      body: json.encode({
+        'nombre': nombre,
+        'correo': correo,
+        'contrasena': contrasena,
+        'telefono': telefono
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      await fetchUserData(); // Refrescar los datos del usuario
+      notifyListeners();
+    } else {
+      throw Exception('Failed to update user data');
+    }
+  }
+
+  // Método para eliminar la cuenta del usuario
+  Future<void> deleteUser() async {
+    var url = Uri.parse('http://67.202.4.38:3000/api/usuarios/${_userId}');
+    var response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      logout(); // Asegúrate de que este método efectivamente limpia los datos del usuario y notifica a los listeners.
+    } else {
+      throw Exception('Failed to delete user with status: ${response.statusCode}');
     }
   }
 }
