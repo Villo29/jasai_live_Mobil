@@ -10,6 +10,8 @@ class AuthModel extends ChangeNotifier {
   UserModel? _currentUser;
 
   UserModel? get currentUser => _currentUser;
+  String get token => _token;  // Getter para token
+  String get userId => _userId;  // Getter para userId
 
   AuthModel();
 

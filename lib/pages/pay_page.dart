@@ -1,196 +1,151 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:JASAI_LIVE/models/auth_model.dart'; // Asegúrate de que la ruta de importación es correcta.
 
 void main() {
-  runApp(PayPage());
+  runApp(
+    Provider<AuthModel>(
+      create: (_) => AuthModel(), // Asegura que AuthModel ya está definido y configurado.
+      child: const MaterialApp(
+        home: PayPage(),
+        debugShowCheckedModeBanner: false,
+      ),
+    ),
+  );
 }
 
-class PayPage extends StatelessWidget {
+class PayPage extends StatefulWidget {
   const PayPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Formulario',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
+  _PayPageState createState() => _PayPageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _PayPageState extends State<PayPage> {
+  final nombreController = TextEditingController();
+  final telefonoController = TextEditingController();
+  final correoController = TextEditingController();
+  String localidad = 'General';
   bool _isLoading = false;
 
-  void _handlePagar() {
+  @override
+  void dispose() {
+    nombreController.dispose();
+    telefonoController.dispose();
+    correoController.dispose();
+    super.dispose();
+  }
+
+  void _handlePagar() async {
     setState(() {
       _isLoading = true;
     });
-    Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _isLoading = false;
-      });
+
+    try {
+      await enviarDatosAlServidor();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Pago realizado con éxito')),
       );
-    });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al realizar el pago: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> enviarDatosAlServidor() async {
+    final authModel = Provider.of<AuthModel>(context, listen: false);
+    var url = Uri.parse('http://67.202.4.38:3000/api/carrito');
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authModel.token}',
+      },
+      body: jsonEncode({
+        '_id': authModel.userId,
+        'nombre': nombreController.text,
+        'localidad': localidad,
+        'correo': correoController.text,
+      }),
+    );
+
+    // Aceptar cualquier respuesta 2xx como un éxito.
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      print("Datos enviados correctamente.");
+    } else {
+      throw Exception('Falló la solicitud: ${response.statusCode} ${response.body}');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        title: const Text('Pagar'),
         backgroundColor: Colors.blue[800],
-        title: const Text(
-          'TU CONFIANZA ES NUESTRA MEJOR RECOMPENSA',
-          style: TextStyle(fontSize: 16.0),
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Card(
-                elevation: 2,
-                margin: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'RELLENE LOS DATOS',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.blue[800],
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          labelText: 'LOCALIDAD',
-                          border: OutlineInputBorder(),
-                        ),
-                        items: ['Localidad 1', 'Localidad 2', 'Localidad 3']
-                            .map((localidad) {
-                          return DropdownMenuItem<String>(
-                            value: localidad,
-                            child: Text(localidad),
-                          );
-                        }).toList(),
-                        onChanged: (value) {},
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'NOMBRE COMPLETO',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'NUMERO DE TELEFONO',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      _isLoading
-                          ? const SpinKitFadingCircle(
-                              color: Colors.blue,
-                              size: 50.0,
-                            )
-                          : ElevatedButton(
-                              onPressed: _handlePagar,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue[800],
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 20),
-                              ),
-                              child: Text('PAGAR'),
-                            ),
-                    ],
-                  ),
+              TextField(
+                controller: nombreController,
+                decoration: const InputDecoration(
+                  labelText: 'Nombre Completo',
+                  border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
+              TextField(
+                controller: correoController,
+                decoration: const InputDecoration(
+                  labelText: 'Correo Electrónico',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: localidad,
+                onChanged: (newValue) {
+                  setState(() {
+                    localidad = newValue!;
+                  });
+                },
+                items: <String>['General', 'Preferente', 'VIP'].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                decoration: const InputDecoration(
+                  labelText: 'Localidad',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: telefonoController,
+                decoration: const InputDecoration(
+                  labelText: 'Número de Teléfono',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                onPressed: _handlePagar,
+                child: const Text('Pagar'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                ),
-                child: Text('QUITAR'),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'SIGUENOS',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.facebook),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.twitter),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.tiktok),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    const Text(
-                      'TERMINOS LEGALES',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text('Terminos y condiciones\nPoliticas de privacidad'),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'CONTACTANOS',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Column(
-                      children: [
-                        Text('jesuruga@email.com'),
-                        Text('+52 961 283 5436'),
-                      ],
-                    ),
-                  ],
+                  backgroundColor: Colors.blue[800],  // Corregido de 'primary' a 'backgroundColor'
                 ),
               ),
             ],
